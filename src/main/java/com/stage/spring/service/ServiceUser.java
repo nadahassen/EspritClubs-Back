@@ -156,6 +156,7 @@ public class ServiceUser implements IServiceUser {
 		}
 		return undeletedUsers;
 	}
+//-----------Delete-----------------
 
 	@Override
 	public void deleteUser(Long id) {
@@ -174,6 +175,7 @@ public class ServiceUser implements IServiceUser {
 		}
 
 	}
+//----------------- Update ---------------------
 
 	@Override
 	public void updateUser(User u) {

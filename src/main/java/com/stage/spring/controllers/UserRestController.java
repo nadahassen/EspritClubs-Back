@@ -1,6 +1,7 @@
 package com.stage.spring.controllers;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,14 +17,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -49,6 +43,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @RequestMapping("/User")
+@CrossOrigin(origins = "http://localhost:4200")
+
 public class UserRestController {
 	@Autowired
 	UserRepository userRepository;
@@ -122,6 +118,7 @@ public class UserRestController {
 	public void updateUser(@RequestBody User u) {
 		serviceUser.updateUser(u);
 	}
+	// **************testing a methode down
 	@PutMapping("/deleteuser/{iduser}")
 	public void deleteUser(@PathVariable("iduser")Long id) {
 		serviceUser.deleteUser(id);
@@ -204,4 +201,18 @@ public class UserRestController {
 	public User updateUserPassword(@PathVariable("uid") Long uid,@RequestBody String password){
 		return serviceUser.updateUserPassword(uid,password);
 	}
+ //--------accepts a user ID as a path variable and deletes the user from the database. chatgpt solution------------------------
+ /*@DeleteMapping("/{id}")
+ public ResponseEntity<?> deleteUser(@PathVariable("id") Long id) {
+	 Optional<User> user = userRepository.findById(id);
+	 if (!user.isPresent()) {
+		 return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+	 }
+	 try {
+		 userRepository.delete(user.get());
+		 return new ResponseEntity<>(HttpStatus.OK);
+	 } catch (Exception e) {
+		 return new ResponseEntity<>("Failed to delete user", HttpStatus.INTERNAL_SERVER_ERROR);
+	 }
+ }*/
 }
