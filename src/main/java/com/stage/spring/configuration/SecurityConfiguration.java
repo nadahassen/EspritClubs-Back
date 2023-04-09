@@ -69,7 +69,37 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable()
+
+		http.authorizeRequests()
+				.antMatchers("/").permitAll()
+				.antMatchers("/login").permitAll()
+				.antMatchers("/dashboard/**").hasAnyRole("admin", "responsable", "membre")
+				.and().formLogin(); }
+
+
+	@Autowired
+	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+		auth.inMemoryAuthentication()
+				.withUser("admin").password("{noop}password").roles("admin")
+				.and()
+				.withUser("responsible").password("{noop}password").roles("responsable")
+				.and()
+				.withUser("member").password("{noop}password").roles("membre")
+				.and()
+				.withUser("etudiant").password("{noop}password").roles("etudiant");
+	}
+
+
+
+
+
+
+
+
+
+
+
+		/*http.cors().and().csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests().antMatchers("/**").permitAll()
@@ -82,32 +112,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .failureHandler(failureHandler())
                 .permitAll();*/
 
-        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-    }
-}
-/*@Slf4j
-class CustomLoginFailureHandler implements AuthenticationFailureHandler {
-    private String defaultFailureUrl;
-   // private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
-
-    public CustomLoginFailureHandler(String defaultFailureUrl){
-        this.defaultFailureUrl = defaultFailureUrl;
+       /* http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);*/
     }
 
-    @Override
-    public void onAuthenticationFailure(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            AuthenticationException exception
-    ) throws ServletException, IOException {
-    	String message = "";
-    	if(exception.getClass() == UsernameNotFoundException.class) {
-			//message = "cannot find a user";
-		} else if(exception.getClass() == BadCredentialsException.class) {
-			message = "check your password-----------mchet";
-			log.info("check your password-----------mchet");
-		}
-     
-    	request.getRequestDispatcher(String.format("/error?message=%s", message)).forward(request, response);
-    }
-}*/
