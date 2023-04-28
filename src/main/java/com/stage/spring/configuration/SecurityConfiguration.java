@@ -35,9 +35,9 @@ import lombok.extern.slf4j.Slf4j;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
-        //securedEnabled = true,
-       //jsr250Enabled = true,
-        prePostEnabled = true)
+		//securedEnabled = true,
+		//jsr250Enabled = true,
+		prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Autowired
 	UserDetailsServiceImpl userDetailsService;
@@ -49,8 +49,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }*/
 	@Bean
 	public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+		return new BCryptPasswordEncoder();
+	}
 	@Bean
 	public AuthTokenFilter authenticationJwtTokenFilter() {
 		return new AuthTokenFilter();
@@ -65,53 +65,49 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	public AuthenticationManager authenticationManagerBean() throws Exception {
 		return super.authenticationManagerBean();
 	}
-	
-
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-
-		http.authorizeRequests()
-				.antMatchers("/").permitAll()
-				.antMatchers("/login").permitAll()
-				.antMatchers("/dashboard/**").hasAnyRole("admin", "responsable", "membre")
-				.and().formLogin(); }
 
 
-	@Autowired
-	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-		auth.inMemoryAuthentication()
-				.withUser("admin").password("{noop}password").roles("admin")
-				.and()
-				.withUser("responsible").password("{noop}password").roles("responsable")
-				.and()
-				.withUser("member").password("{noop}password").roles("membre")
-				.and()
-				.withUser("etudiant").password("{noop}password").roles("etudiant");
-	}
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http.cors().and().csrf().disable()
+				.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
+				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+				.authorizeRequests().antMatchers("/**").permitAll()
+				.antMatchers("/api/test/**","/Offer/**","/Quizz/**","/Rating/**","/Quizz/Question/**","/Quizz/Answer/**","/Quizz/Score/**","/Quizz/Question/Answers/**","/Offer/Rating/**","/genrateAndDownloadQRCode/**","/genrateQRCode/**","/pdf/generate/**",
+						"/Article/**","/Article_comments/**","/Article_reactions/**","/User/checkemail").permitAll()
 
-
-
-
-
-
-
-
-
-
-
-		/*http.cors().and().csrf().disable()
-                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeRequests().antMatchers("/**").permitAll()
-                .antMatchers("/api/test/**","/Offer/**","/Quizz/**","/Rating/**","/Quizz/Question/**","/Quizz/Answer/**","/Quizz/Score/**","/Quizz/Question/Answers/**","/Offer/Rating/**","/genrateAndDownloadQRCode/**","/genrateQRCode/**","/pdf/generate/**",
-                		"/Article/**","/Article_comments/**","/Article_reactions/**","/User/checkemail").permitAll()
-                
-                .anyRequest().authenticated();
+				.anyRequest().authenticated();
                /* .and()
                 .formLogin()//.loginPage("http://127.0.0.1:8089/SpringMVC/User/signin")
                 .failureHandler(failureHandler())
                 .permitAll();*/
 
-       /* http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);*/
+		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+	}
+}
+/*@Slf4j
+class CustomLoginFailureHandler implements AuthenticationFailureHandler {
+    private String defaultFailureUrl;
+   // private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
+
+    public CustomLoginFailureHandler(String defaultFailureUrl){
+        this.defaultFailureUrl = defaultFailureUrl;
     }
 
+    @Override
+    public void onAuthenticationFailure(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            AuthenticationException exception
+    ) throws ServletException, IOException {
+    	String message = "";
+    	if(exception.getClass() == UsernameNotFoundException.class) {
+			//message = "cannot find a user";
+		} else if(exception.getClass() == BadCredentialsException.class) {
+			message = "check your password-----------mchet";
+			log.info("check your password-----------mchet");
+		}
+
+    	request.getRequestDispatcher(String.format("/error?message=%s", message)).forward(request, response);
+    }
+}*/
