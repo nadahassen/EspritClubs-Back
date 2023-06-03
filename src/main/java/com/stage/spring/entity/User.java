@@ -107,10 +107,6 @@ public class User implements Serializable{
 	@Column(name = "resettoken")
 	private String resettoken;
 
-
-
-
-	
 	@OneToOne(cascade = CascadeType.ALL,fetch= FetchType.EAGER)
 	@JoinColumn(name="code_id")
 	private Code code;
