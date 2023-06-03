@@ -8,11 +8,11 @@
 		<version>2.6.3</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.prospace.spring</groupId>
+	<groupId>com.espritClub.spring</groupId>
 	<artifactId>espritClub</artifactId>
 	<version>1.0-SNAPSHOT</version>
-	<name>prospace-project</name>
-	<description>prospace-project</description>
+	<name>espritClub</name>
+	<description>espritClub</description>
 	<properties>
 		<java.version>1.8</java.version>
 		<maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
