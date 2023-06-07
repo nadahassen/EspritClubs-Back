@@ -71,6 +71,8 @@ public class User implements Serializable{
 	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> userRoles = new HashSet<>();
 
+	private boolean stateUser;
+	private boolean connected;
 	private boolean locked;
 
 	private boolean enabled;
@@ -118,6 +120,7 @@ public class User implements Serializable{
 	public boolean isLocked() {
 		return locked;
 	}
+
 
 
 

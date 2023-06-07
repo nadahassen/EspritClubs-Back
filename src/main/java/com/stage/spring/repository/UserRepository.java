@@ -32,7 +32,7 @@ public interface UserRepository extends JpaRepository<User, Long>{
     public void updateFailedAttempts(int failAttempts, String userName);*/
 	
 	User findByEmail(String email);
-	
-	
+
+	User findByStateUser (boolean stateUser);
 	
 }

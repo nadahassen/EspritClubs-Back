@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.stage.spring.service.ServiceUser;
 import org.apache.catalina.security.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -215,4 +216,17 @@ public class UserRestController {
 		 return new ResponseEntity<>("Failed to delete user", HttpStatus.INTERNAL_SERVER_ERROR);
 	 }
  }*/
+
+	///***** ACTIVATE DESACTIVATE USER
+	@GetMapping("/retrieve-user-by-state/{user-state}")
+	@ResponseBody
+	public List<User> retrieveUserByState(@PathVariable("user-state") boolean stateUser) {
+		return serviceUser.retrieveUserByState(stateUser); // Invoke the method on the instance
+	}
+
+	@PutMapping("/activate-user")
+	public User activateUser(@RequestBody User user) throws Exception {
+		return serviceUser.activateUser(user); // Invoke the method on the instance
+	}
+
 }

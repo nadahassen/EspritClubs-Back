@@ -24,4 +24,9 @@ public interface IServiceUser {
 	public boolean ifEmailExists(String email);
 	public User getUserByEmail(String email);
 	public User updateUserPassword(Long uid,String password);
+
+	public User activateUser (User user);
+	public boolean getstateUser(User user);
+	List<User> retrieveUserByState(boolean stateUser);
+
 }

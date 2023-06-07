@@ -637,11 +637,36 @@ public class ServiceUser implements IServiceUser {
 			return	userRepository.save(u);
 			
 		}
-	
 
-		
 
-		
+	@Override
+	public User activateUser(User user) {
+
+		if (user.isStateUser() == false) {
+
+			user.setStateUser(true);
+		} else {
+			user.setStateUser(false);
+		}
+		return userRepository.save(user);
+	}
+
+	@Override
+	public List<User> retrieveUserByState(boolean stateUser) {
+		return (List<User>) userRepository.findByStateUser(stateUser);
+	}
+
+	public boolean getstateUser(User user) {
+		if (user.isStateUser()) {
+			return true;
+		} else {
+			return false;
+		}
+
+	}
+
+
+
 	/*	@Scheduled(cron="*//*5 * * * * *")
 		public void birthdayUsers() {
 			log.info(getTodaysUsersBirthday().toString());
