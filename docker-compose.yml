@@ -1,0 +1,31 @@
+version: "3.4"
+
+services:
+  mysql-container:
+    container_name: mysql-container
+    ports:
+      - '3306:3306'
+    environment:
+      - MYSQL_DATABASE=1
+      - MYSQL_ALLOW_EMPTY_PASSWORD=1
+    restart: always
+    volumes:
+      - mysql-container:/var/lib/mysql:rw
+    image: 'mysql:latest'
+  espritclub-backend:
+    depends_on:
+      - mysql-container
+    container_name: espritclub-backend
+    ports:
+      - '8089:8089'
+    image: nada11/espritclub-1.0
+  espritclub-frontend:
+    depends_on:
+      - espritclub-backend
+    container_name: espritclub-frontend
+    image: nada11/espritclubfront-1.0
+    ports:
+      - '4200:80'
+
+volumes:
+  mysql-container: { }
