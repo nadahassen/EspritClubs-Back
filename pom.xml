@@ -8,7 +8,7 @@
 		<version>2.6.3</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.espritClub.spring</groupId>
+	<groupId>com.espritclub.spring</groupId>
 	<artifactId>espritclub</artifactId>
 	<version>1.0-SNAPSHOT</version>
 	<name>espritclub</name>
