@@ -13,7 +13,7 @@ pipeline {
 
                 }
             }
-     
+
          stage('MVN COMPILE') {
                 steps {
                     sh 'mvn clean compile'
@@ -33,7 +33,7 @@ pipeline {
                 sh'mvn sonar:sonar -Dsonar.login=cff6cb5a7900b77f7b43cbe518da6c059ef2634c'
                 }
 
-        }
+        }*/
         stage('testing') {
         steps{
             sh'mvn test'
@@ -42,10 +42,10 @@ pipeline {
 
        stage('Nexus') {
             steps {
-					            sh'mvn deploy'
+		      sh'mvn deploy'
 
             }
-        }*/
+        }
 
        stage('DOCKER BUILD IMG STAGE'){
 
