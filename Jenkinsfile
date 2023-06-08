@@ -70,7 +70,7 @@ pipeline {
 		}
         stage('Push image Backend to Dockerhub') {
             steps {
-                sh 'docker push nada11/espritclub-1.0 '
+                  sh 'docker push nada11/espritclub-1.0:latest'
 
             }
         }
