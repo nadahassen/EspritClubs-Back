@@ -28,12 +28,12 @@ pipeline {
                 }
 
             }
-       /* stage('MVN SONAREQUBE') {
+        stage('MVN SONAREQUBE') {
             steps {
                 sh'mvn sonar:sonar -Dsonar.login=cff6cb5a7900b77f7b43cbe518da6c059ef2634c'
                 }
 
-        }*/
+        }
         stage('testing') {
         steps{
             sh'mvn test'
