@@ -26,6 +26,10 @@ services:
     image: nada11/espritclubfront-1.0
     ports:
       - '4200:80'
-
+  selenium-app:
+     container_name: selenium-app
+     image: nada11/seleniumtest
+     ports:
+       - '8888:8888'
 volumes:
   mysql-container: { }

@@ -1,4 +1,4 @@
-pipeline {
+ pipeline {
     agent any
 
     stages {
@@ -14,7 +14,7 @@ pipeline {
                 }
             }
 
-       /*  stage('MVN COMPILE') {
+         stage('MVN COMPILE') {
                 steps {
                     sh 'mvn clean compile'
 
@@ -45,7 +45,7 @@ pipeline {
 		      sh'mvn deploy'
 
             }
-        }*/
+        }
 
        stage('DOCKER BUILD IMG STAGE'){
 
