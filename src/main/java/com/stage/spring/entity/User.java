@@ -121,6 +121,15 @@ public class User implements Serializable{
 		return locked;
 	}
 
+	//relation with class club
+
+	@ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+	@JoinTable(
+			name = "user_club",
+			joinColumns = @JoinColumn(name = "user_id"),
+			inverseJoinColumns = @JoinColumn(name = "club_id")
+	)
+	private Set<Club> clubs = new HashSet<>();
 
 
 
