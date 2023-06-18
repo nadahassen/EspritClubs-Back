@@ -43,16 +43,37 @@ public class ClubRestController {
         Club f = new ObjectMapper().readValue(club, Club.class);
         serviceClub.addClub(f, idu,file);
     }
+
+    //add without user
+
+    @PostMapping("/addclub2")
+    public void addClub2(@RequestParam("club") String club,
+                        @RequestParam("file") MultipartFile file
+
+                       )
+            throws IOException
+    {
+        Club f = new ObjectMapper().readValue(club, Club.class);
+        serviceClub.addClub2(f,file);
+    }
+
     //uploadFiles
 
-    @PostMapping("/uploadFilesClub/{idF}")
-    public List<String> uploadFiles(	@PathVariable("idF") Long idF,@RequestParam("files")List<MultipartFile>
+   /* @PostMapping("/uploadFilesClub/{idF}")
+    public List<String> uploadFiles(@PathVariable("idF") Long idF,@RequestParam("files")List<MultipartFile>
             multipartFiles) throws IOException {
+        return  serviceClub.uploadFilesAndAffectToClub(idF,multipartFiles);
+    }*/
+
+    @PostMapping("/uploadFileClub/{idF}")
+    public List<String> uploadFiles(	@PathVariable("idF") Long idF,@RequestParam("files")List<MultipartFile> multipartFiles) throws IOException {
 
 
         return  serviceClub.uploadFilesAndAffectToClub(idF,multipartFiles);
+
     }
-     //retreiveAll
+
+    //retreiveAll
 
     @GetMapping("/getclub")
     public List<Club> retreiveAllClubs() {
@@ -68,13 +89,13 @@ public class ClubRestController {
     public Club updateClub(
             @RequestParam("club") String club,
             @RequestParam(name="file", required=false) MultipartFile file,
-            //@RequestParam(name="files1", required=false) List<MultipartFile> files1,
+            @RequestParam(name="files1", required=false) List<MultipartFile> files1,
             @RequestParam(name="files2", required=false) List<MultipartFile> files2 )
 
             throws JsonMappingException, JsonProcessingException
     {
         Club f = new ObjectMapper().readValue(club, Club.class);
-        return  serviceClub.updateClub(f,file,files2);
+        return  serviceClub.updateClub(f,file,files1,files2);
 
     }
 
@@ -95,18 +116,21 @@ public class ClubRestController {
         return serviceClub.annulerParticipation(idf, idu);
     }
     //retreive club X
-    @GetMapping("/retrieve-club/{formation-id}")
+    @GetMapping("/retrieve-club/{club-id}")
     public Club retrieveClub(@PathVariable("club-id") Long clubId) {
         return serviceClub.retrieveClub(clubId);
     }
 
+
+
     // retrieve participant
     @GetMapping("/retrieve-participants-club/{club-id}")
 
-    public List<User> retrieveClubParticipants(@PathVariable("club-id")Long id){
+    public List<User> retrieveClubParticipants(@PathVariable("club-id") Long id){
         return serviceClub.retrieveClubParticipants(id);
 
     }
+
 
     // get files
     @GetMapping("/list-other-files/{club-id}")

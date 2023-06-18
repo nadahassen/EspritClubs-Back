@@ -73,9 +73,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 				.authorizeRequests().antMatchers("/**").permitAll()
-				.antMatchers("/api/test/**","/Offer/**","/Quizz/**","/Rating/**","/Quizz/Question/**","/Quizz/Answer/**","/Quizz/Score/**","/Quizz/Question/Answers/**","/Offer/Rating/**","/genrateAndDownloadQRCode/**","/genrateQRCode/**","/pdf/generate/**",
-						"/Article/**","/Article_comments/**","/Article_reactions/**","/User/checkemail").permitAll()
-
 				.anyRequest().authenticated();
                /* .and()
                 .formLogin()//.loginPage("http://127.0.0.1:8089/SpringMVC/User/signin")
@@ -83,6 +80,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .permitAll();*/
 
 		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+
 	}
 }
 /*@Slf4j

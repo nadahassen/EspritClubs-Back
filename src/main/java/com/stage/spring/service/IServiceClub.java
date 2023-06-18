@@ -9,8 +9,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.stage.spring.entity.File;
 public interface IServiceClub {
+    void addClub2(Club f, MultipartFile file) throws IOException;
 
     void addClub(Club f, Long idu, MultipartFile file) throws IOException;
+    //public String uploadFilesAndAffectToClub(Long idF,MultipartFile multipartFiles)
+           // throws IOException ;
     public List<String> uploadFilesAndAffectToClub(Long idF,List<MultipartFile> multipartFiles)
             throws IOException ;
     List<Club> getClubs();

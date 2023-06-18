@@ -8,7 +8,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
-
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -18,6 +18,8 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
+
 public class Club  implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -53,9 +55,12 @@ public class Club  implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(pattern = "yyyy-MM-dd@HH:mm:ss.SSSZ")
     private Date deletedAt;
-    //relation with class User
 
+
+    //relation with class User
     @ManyToMany(mappedBy = "clubs")
     private Set<User> members = new HashSet<>();
-
+    //relation with class event
+    @ManyToMany(mappedBy = "clubs")
+    private List<Event> events;
 }

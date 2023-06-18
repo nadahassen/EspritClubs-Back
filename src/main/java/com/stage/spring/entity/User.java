@@ -122,7 +122,6 @@ public class User implements Serializable{
 	}
 
 	//relation with class club
-
 	@ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
 	@JoinTable(
 			name = "user_club",

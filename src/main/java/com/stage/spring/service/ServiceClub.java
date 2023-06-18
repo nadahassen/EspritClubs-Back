@@ -1,11 +1,9 @@
 package com.stage.spring.service;
+
 import java.io.IOException;
 import java.time.Period;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
-public class ServiceClub {
+public class ServiceClub implements IServiceClub {
 
     @Autowired
     ClubRepository clubRepository;
@@ -45,7 +43,7 @@ public class ServiceClub {
     // add
 
     @Transactional
-    public void addClub(Club f,Long idu,MultipartFile file) throws IOException {
+    public void addClub(Club f, Long idu, MultipartFile file) throws IOException {
 
         List<String> filenames = new ArrayList<>();
 
@@ -56,15 +54,31 @@ public class ServiceClub {
         Image image = new Image(file.getOriginalFilename());
         String filename1 = StringUtils.cleanPath(file.getOriginalFilename());
         filenames.add(filename1);
-
         f.setImage(image);
         imageService.save(file);
         clubRepository.save(f);
 
     }
+    //add club without user
+
+    @Transactional
+    public void addClub2(Club f, MultipartFile file) throws IOException {
+        List<String> filenames = new ArrayList<>();
+        Date date = new Date(System.currentTimeMillis());
+        f.setCreatedAt(date);
+        // Image
+        Image image = new Image(file.getOriginalFilename());
+        String filename1 = StringUtils.cleanPath(file.getOriginalFilename());
+        filenames.add(filename1);
+        f.setImage(image);
+        imageService.save(file);
+        clubRepository.save(f);
+    }
+
+
+
 
     //uploadFiles And Affect To Club
-
 
     @Transactional
 
@@ -93,6 +107,27 @@ public class ServiceClub {
         return filenames;
 
     }
+    /*@Transactional
+
+    public String uploadFilesAndAffectToClub(Long idF, MultipartFile multipartFiles) throws IOException {
+
+        List<String> filenames = new ArrayList<>();
+
+        Club f = clubRepository.findById(idF).orElse(null);
+
+
+        File file = new File(multipartFiles.getOriginalFilename());
+        file.setType(FileType.FormationFile);
+        f.getOtherFiles().add(file);
+
+        fileRepository.save(file);
+        String filename = StringUtils.cleanPath(multipartFiles.getOriginalFilename());
+
+        imageService.save(multipartFiles);
+
+        return filename;
+
+    }*/
 
     //get clubs
     public List<Club> getClubs() {
@@ -115,32 +150,41 @@ public class ServiceClub {
         clubRepository.save(deletedClub);
 
     }
-    // update club
 
-    @Transactional
-    public Club updateClub(Club f,MultipartFile file,List<MultipartFile> multipartFiles) {
+
+    public Club updateClub(Club f, MultipartFile file,
+                           List<MultipartFile> files2,
+                           List<MultipartFile> multipartFiles) {
         User user = userRepository.findById(f.getOrganizer().getIdUser()).orElse(null);
-        Club club = clubRepository.findById(f.getIdClub()).orElse(null);
-        f.setOrganizer(user);;
-        f.setCreatedAt(club.getCreatedAt());
+        Club formation = clubRepository.findById(f.getIdClub()).orElse(null);
+        f.setOrganizer(user);
+        ;
+        f.setCreatedAt(formation.getCreatedAt());
 
         Date date = new Date(System.currentTimeMillis());
         f.setModifiedAt(date);
-        if (f.getImage() == null ) {
-            f.setImage(club.getImage());
+        if (f.getImage() == null) {
+            f.setImage(formation.getImage());
         }
         //Image
-        if (file!=null) {
+        if (file != null) {
             Image image = new Image(file.getOriginalFilename());
             f.setImage(image);
             imageService.save(file);
         } else {
-            f.setImage(club.getImage());
+            f.setImage(formation.getImage());
+        }
+        if (files2 != null) {
+            for (MultipartFile fi : files2) {
+                File video = new File(fi.getOriginalFilename());
+                imageService.save(fi);
+                fileRepository.save(video);
 
+            }
         }
 
-        if (multipartFiles!=null){
-            for (MultipartFile fi : multipartFiles){
+        if (multipartFiles != null) {
+            for (MultipartFile fi : multipartFiles) {
                 File fil = new File(fi.getOriginalFilename());
                 f.getOtherFiles().add(fil);
                 imageService.save(fi);
@@ -153,6 +197,44 @@ public class ServiceClub {
 
         return clubRepository.save(f);
     }
+    // update club
+
+    /* @Transactional
+     public Club updateClub(Club f,MultipartFile file,List<MultipartFile> multipartFiles) {
+         User user = userRepository.findById(f.getOrganizer().getIdUser()).orElse(null);
+         Club club = clubRepository.findById(f.getIdClub()).orElse(null);
+         f.setOrganizer(user);;
+         f.setCreatedAt(club.getCreatedAt());
+
+         Date date = new Date(System.currentTimeMillis());
+         f.setModifiedAt(date);
+         if (f.getImage() == null ) {
+             f.setImage(club.getImage());
+         }
+         //Image
+         if (file!=null) {
+             Image image = new Image(file.getOriginalFilename());
+             f.setImage(image);
+             imageService.save(file);
+         } else {
+             f.setImage(club.getImage());
+
+         }
+
+         if (multipartFiles!=null){
+             for (MultipartFile fi : multipartFiles){
+                 File fil = new File(fi.getOriginalFilename());
+                 f.getOtherFiles().add(fil);
+                 imageService.save(fi);
+
+                 fileRepository.save(fil);
+             }
+         }
+         //EndImage
+
+
+         return clubRepository.save(f);
+     }*/
 // participe club
     public Club participerClub(Long idf, Long idu) {
         User u = userRepository.findById(idu).orElse(null);
@@ -164,7 +246,7 @@ public class ServiceClub {
         //	{
         f.getMembers().add(u);
         f.setNbParticipants(f.getNbParticipants() + 1);
-        return	clubRepository.save(f);
+        return clubRepository.save(f);
 
 
     }
@@ -175,12 +257,12 @@ public class ServiceClub {
         Club f = clubRepository.findById(idf).orElse(null);
 
 
-        if((f.getMembers().contains(u)))
-        {
+        if ((f.getMembers().contains(u))) {
             f.getMembers().remove(u);
             f.setNbParticipants(f.getNbParticipants() - 1);
             clubRepository.save(f);
-            return true;}
+            return true;
+        }
         return false;
 
     }
@@ -190,13 +272,18 @@ public class ServiceClub {
         return clubRepository.findById(id).orElse(null);
     }
 
- // retrieve club participants
+    // retrieve club participants
     public List<User> retrieveClubParticipants(Long id) {
         Club f = clubRepository.findById(id).orElse(null);
         return (List<User>) f.getMembers();
+        // return club != null ? club.getMembers() : Collections.emptySet();
     }
 
-        //get other files
+    /*public List<User> retrieveClubParticipants(Long id) {
+        Club f = clubRepository.findById(id).orElse(null);
+        return  f.getMembers();
+    }*/
+    //get other files
     public List<File> getOtherFiles(Long idF) {
         Club f = clubRepository.findById(idF).orElse(null);
         return f.getOtherFiles();

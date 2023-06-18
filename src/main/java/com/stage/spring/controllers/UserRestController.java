@@ -124,7 +124,12 @@ public class UserRestController {
 	public void deleteUser(@PathVariable("iduser")Long id) {
 		serviceUser.deleteUser(id);
 	}
-	@GetMapping("/getConnectedUser")
+
+	//********** connected user *********
+
+	//********* VERSION 1
+
+	/*@GetMapping("/getConnectedUser")
 	public User getTheConnectedUser(){
 		User user=null;
 		String username;
@@ -132,7 +137,24 @@ public class UserRestController {
 		username  = ((UserDetails) principal).getUsername();
 		user = serviceUser.getOne(username);
 		return user;
+	}*/
+ //********* VERSION 2
+	@GetMapping("/getConnectedUser")
+	public User getTheConnectedUser() {
+		User user = null;
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		if (principal instanceof UserDetails) {
+			String username = ((UserDetails) principal).getUsername();
+			user = serviceUser.getOne(username);
+		} else if (principal instanceof String) {
+			String username = (String) principal;
+			user = serviceUser.getOne(username);
+		}
+
+		return user;
 	}
+
 
 	@GetMapping("/getCurrentUserName")
 	public String getCurrentUserName() {
@@ -146,6 +168,7 @@ public class UserRestController {
 		}
 		return username;
 	}
+
 
 	@GetMapping("/getCurrentUserId")
 	public Long getCurrentUserId() {
