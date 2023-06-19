@@ -1,18 +1,15 @@
 package com.stage.spring.controllers;
 
 import com.stage.spring.entity.Club;
+import com.stage.spring.entity.Mail;
+import com.stage.spring.service.ServiceMail;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import java.util.Map;
+
 import java.util.List;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -31,7 +28,8 @@ public class ClubRestController {
 
     @Autowired
     ServiceClub serviceClub;
-
+    @Autowired
+    ServiceMail serviceMail;
    // add
     @PostMapping("/addclub/{idu}")
     public void addClub(@RequestParam("club") String club,
@@ -57,6 +55,33 @@ public class ClubRestController {
         serviceClub.addClub2(f,file);
     }
 
+    // send email to the request
+    /*@PostMapping("/sendMail")
+    public void sendMail(@RequestBody  Mail mail) {
+        String to = mail.getTo();
+        String subject = "Club Creation Request";
+        String body = "Dear student,\n\nThank you for your request to create a club. Your request has been accepted we will send you your crediantials soon." +
+                "\n\nBest regards,\nEsprit Team";
+        serviceMail.sendMail(to, subject, body);
+    }
+*/
+    @PostMapping("/sendMail")
+    public void sendMail(@RequestBody Map<String, String> mailData) {
+        String to = mailData.get("to");
+        String subject = "Club Creation Request";
+        String body = "Dear student,\n\nThank you for your request to create a club. Your request has been accepted we will send you your crediantials soon." +
+                "\n\nBest regards,\nEsprit Team";
+        serviceMail.sendMail(to, subject, body);
+    }
+ //send when refused
+
+    @PostMapping("/sendMailrefus")
+    public void sendMailrefus(@RequestBody Map<String, String> mailData) {
+        String to = mailData.get("to");
+        String subject = "Rejet de la demande de création de club";
+        String body = "Cher etudiant,\n\nNous regrettons de vous informer que votre demande de création de club a été refusée. Merci de votre compréhension.\\n\\nCordialement,\\nL'équipe d'Esprit";
+        serviceMail.sendMailRefus(to, subject, body);
+    }
     //uploadFiles
 
    /* @PostMapping("/uploadFilesClub/{idF}")

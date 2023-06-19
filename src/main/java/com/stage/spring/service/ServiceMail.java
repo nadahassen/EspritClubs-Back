@@ -24,5 +24,25 @@ public class ServiceMail implements IServiceMail{
 		javaMailSender.send(simpleMailMessage);
 		
 	}
+ ///send mail with writing the email address : cas ADDCLUB2
+	public void sendMail(String to, String subject, String body) {
+		SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+		simpleMailMessage.setFrom("naddoun51@gmail.com");
+		simpleMailMessage.setTo(to);
+		simpleMailMessage.setSubject(subject);
+		simpleMailMessage.setText(body);
+		javaMailSender.send(simpleMailMessage);
+	}
+
+	//send when refused
+
+	public void sendMailRefus(String to, String subject, String body) {
+		SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+		simpleMailMessage.setFrom("naddoun51@gmail.com");
+		simpleMailMessage.setTo(to);
+		simpleMailMessage.setSubject(subject);
+		simpleMailMessage.setText(body);
+		javaMailSender.send(simpleMailMessage);
+	}
 
 }
