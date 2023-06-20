@@ -1,5 +1,4 @@
 package com.stage.spring.entity;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -63,4 +62,9 @@ public class Club  implements Serializable {
     //relation with class event
     @ManyToMany(mappedBy = "clubs")
     private List<Event> events;
+
+    //relation condidature
+    @OneToMany(mappedBy = "clubSouhaite")
+    private List<Condidature> candidatures;
+
 }

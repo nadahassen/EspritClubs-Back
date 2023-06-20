@@ -33,6 +33,7 @@ public class Event implements Serializable {
     @OneToOne(cascade = CascadeType.ALL)
     private Image image;
     private boolean isDeleted=false;
+    private int nbParticipants;
 
    /* @ManyToMany
     private Set<User> participants = new HashSet<>();*/
