@@ -28,7 +28,7 @@ public class Condidature {
     private String expérience;
 
 
-//relation avec Club
+//relation avec Clubpublication
 @ManyToOne
 @JoinColumn(name = "club_id")
 private Club clubSouhaite;

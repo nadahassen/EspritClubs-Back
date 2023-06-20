@@ -11,6 +11,7 @@ import java.util.List;
 public interface ClubRepository extends JpaRepository<Club, Long> {
     @Query("Select c from Club c where c.isDeleted= 0")
     public List<Club>  getUndeletedClubs();
+    List<Club> findByUserId(Long idUser);
 
 
 

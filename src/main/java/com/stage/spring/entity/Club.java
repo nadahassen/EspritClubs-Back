@@ -63,8 +63,5 @@ public class Club  implements Serializable {
     @ManyToMany(mappedBy = "clubs")
     private List<Event> events;
 
-    //relation condidature
-    @OneToMany(mappedBy = "clubSouhaite")
-    private List<Condidature> candidatures;
 
 }

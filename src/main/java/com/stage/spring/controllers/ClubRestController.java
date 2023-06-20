@@ -163,7 +163,12 @@ public class ClubRestController {
         return serviceClub.getOtherFiles(clubId);
     }
 
+//***********publication club *************
 
+    @GetMapping("/getClubsByUser/{userId}")
+    public List<Club> getClubsByUser(@PathVariable("userId") Long userId) {
+        return serviceClub.getClubsByUser(userId);
+    }
 
 
 }

@@ -294,6 +294,8 @@ public class ServiceClub implements IServiceClub {
 
         fileRepository.deleteById(idFile);
     }
-
-
+ //************************publication club***********
+ public List<Club> getClubsByUser(Long userId) {
+     return clubRepository.findByUserId(userId);
+ }
 }
