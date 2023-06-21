@@ -22,8 +22,11 @@ public class Condidature {
     private Long idConditature;
 
     private String nomPrenom;
-    private String email;
-    private Integer tel;
+    private String emailCondidat;
+    private String classCondidat;
+
+
+    private Integer telCondidat;
     private String motivation;
     private String expérience;
 

@@ -1,59 +1,47 @@
 package com.stage.spring.controllers;
 
-import com.stage.spring.entity.Club;
-import com.stage.spring.entity.Mail;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.stage.spring.entity.ClubPublication;
+import com.stage.spring.entity.File;
+import com.stage.spring.entity.User;
+import com.stage.spring.service.ServiceClubPub;
 import com.stage.spring.service.ServiceMail;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import java.util.Map;
-
-import java.util.List;
-
 import org.springframework.web.multipart.MultipartFile;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.stage.spring.entity.File;
-import com.stage.spring.entity.User;
-import com.stage.spring.service.ServiceClub;
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
-@RequestMapping("/Club")
+@RequestMapping("/ClubPub")
 @CrossOrigin(origins = "http://localhost:4200")
-public class ClubRestController {
+public class ClubPubRestController {
 
     @Autowired
-    ServiceClub serviceClub;
+    ServiceClubPub serviceClub;
     @Autowired
     ServiceMail serviceMail;
-   // add
+    // add
     @PostMapping("/addclub/{idu}")
     public void addClub(@RequestParam("club") String club,
-                             @RequestParam("file") MultipartFile file,
+                        @RequestParam("file") MultipartFile file,
 
-                             @PathVariable("idu") Long idu)
+                        @PathVariable("idu") Long idu)
             throws IOException
     {
-        Club f = new ObjectMapper().readValue(club, Club.class);
+        ClubPublication f = new ObjectMapper().readValue(club, ClubPublication.class);
         serviceClub.addClub(f, idu,file);
     }
 
     //add without user
 
-    @PostMapping("/addclub2")
-    public void addClub2(@RequestParam("club") String club,
-                        @RequestParam("file") MultipartFile file
 
-                       )
-            throws IOException
-    {
-        Club f = new ObjectMapper().readValue(club, Club.class);
-        serviceClub.addClub2(f,file);
-    }
 
     // send email to the request
     /*@PostMapping("/sendMail")
@@ -73,7 +61,7 @@ public class ClubRestController {
                 "\n\nBest regards,\nEsprit Team";
         serviceMail.sendMail(to, subject, body);
     }
- //send when refused
+    //send when refused
 
     @PostMapping("/sendMailrefus")
     public void sendMailrefus(@RequestBody Map<String, String> mailData) {
@@ -82,36 +70,22 @@ public class ClubRestController {
         String body = "Cher etudiant,\n\nNous regrettons de vous informer que votre demande de création de club a été refusée. Merci de votre compréhension.\\n\\nCordialement,\\nL'équipe d'Esprit";
         serviceMail.sendMailRefus(to, subject, body);
     }
-    //uploadFiles
 
-   /* @PostMapping("/uploadFilesClub/{idF}")
-    public List<String> uploadFiles(@PathVariable("idF") Long idF,@RequestParam("files")List<MultipartFile>
-            multipartFiles) throws IOException {
-        return  serviceClub.uploadFilesAndAffectToClub(idF,multipartFiles);
-    }*/
-
-    @PostMapping("/uploadFileClub/{idF}")
-    public List<String> uploadFiles(	@PathVariable("idF") Long idF,@RequestParam("files")List<MultipartFile> multipartFiles) throws IOException {
-
-
-        return  serviceClub.uploadFilesAndAffectToClub(idF,multipartFiles);
-
-    }
 
     //retreiveAll
 
     @GetMapping("/getclub")
-    public List<Club> retreiveAllClubs() {
+    public List<ClubPublication> retreiveAllClubs() {
         return serviceClub.getClubs();
     }
     //get udelete club
     @GetMapping("/getundfor")
-    public List<Club> retreiveAllUndeletedClubs() {
+    public List<ClubPublication> retreiveAllUndeletedClubs() {
         return serviceClub.getUndeletedClub();
     }
     //update
     @PutMapping("/updateclub")
-    public Club updateClub(
+    public ClubPublication updateClub(
             @RequestParam("club") String club,
             @RequestParam(name="file", required=false) MultipartFile file,
             @RequestParam(name="files1", required=false) List<MultipartFile> files1,
@@ -119,7 +93,7 @@ public class ClubRestController {
 
             throws JsonMappingException, JsonProcessingException
     {
-        Club f = new ObjectMapper().readValue(club, Club.class);
+        ClubPublication f = new ObjectMapper().readValue(club, ClubPublication.class);
         return  serviceClub.updateClub(f,file,files1,files2);
 
     }
@@ -131,7 +105,7 @@ public class ClubRestController {
     }
     //participer
     @PutMapping("/participerclub/{idf}/{idu}")
-    public Club participerClub(@PathVariable("idf") Long idf,@PathVariable("idu") Long idu) {
+    public ClubPublication participerClub(@PathVariable("idf") Long idf,@PathVariable("idu") Long idu) {
         return serviceClub.participerClub(idf, idu);
     }
 
@@ -142,7 +116,7 @@ public class ClubRestController {
     }
     //retreive club X
     @GetMapping("/retrieve-club/{club-id}")
-    public Club retrieveClub(@PathVariable("club-id") Long clubId) {
+    public ClubPublication retrieveClub(@PathVariable("club-id") Long clubId) {
         return serviceClub.retrieveClub(clubId);
     }
 
@@ -163,24 +137,4 @@ public class ClubRestController {
         return serviceClub.getOtherFiles(clubId);
     }
 
-//***********publication club *************
-
-   /* @GetMapping("/getClubsByUser/{idUser}")
-    public List<Club> getClubsByUser(@PathVariable("idUser") Long idUser) {
-        return serviceClub.getClubsByUser(idUser);
-    }*/
-
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
