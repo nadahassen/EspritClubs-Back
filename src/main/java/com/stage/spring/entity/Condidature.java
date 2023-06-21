@@ -34,7 +34,7 @@ public class Condidature {
 //relation avec Clubpublication
 @ManyToOne
 @JoinColumn(name = "club_id")
-private Club clubSouhaite;
+private ClubPublication clubSouhaite;
 
 
 
