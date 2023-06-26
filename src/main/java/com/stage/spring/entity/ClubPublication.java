@@ -25,10 +25,10 @@ public class ClubPublication {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idClub;
 
-    private String NomClub;
+    private String nomClub;
     private String category;
-    private String DescriptionClub;
-    private String EmailClub;
+    private String descriptionClub;
+    private String emailClub;
 
     @ManyToOne
     private User organizer;

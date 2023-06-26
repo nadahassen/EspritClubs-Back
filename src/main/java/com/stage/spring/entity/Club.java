@@ -26,12 +26,12 @@ public class Club  implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idClub;
 
-    private String NomClub;
-    private String DescriptionClub;
+    private String nomClub;
+    private String descriptionClub;
     private String category;
     private boolean isDeleted;
     private int nbMembres;
-    private String Emailrespnsable;
+    private String emailResponsable;
 
     @ManyToOne
     private User organizer;

@@ -28,7 +28,7 @@ public class Condidature {
 
     private Integer telCondidat;
     private String motivation;
-    private String expérience;
+    private String experience;
 
 
 //relation avec Clubpublication
