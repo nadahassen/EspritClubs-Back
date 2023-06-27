@@ -269,6 +269,7 @@ public class ServiceClub implements IServiceClub {
 
     // retrieve club
     public Club retrieveClub(Long id) {
+
         return clubRepository.findById(id).orElse(null);
     }
 

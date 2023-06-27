@@ -131,14 +131,20 @@ public class User implements Serializable{
 	private Set<Club> clubs = new HashSet<>();
 
 //relation with class club publication
-
 	@ManyToMany
 	@JoinTable(name = "user_club_publication",
 			joinColumns = @JoinColumn(name = "user_id"),
 			inverseJoinColumns = @JoinColumn(name = "club_publication_id"))
 	private List<ClubPublication> clubPublications;
 
-
+//relation with class renouvellement_club
+@ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+@JoinTable(
+		name = "user_renouvellement_club",
+		joinColumns = @JoinColumn(name = "user_id"),
+		inverseJoinColumns = @JoinColumn(name = "renouvellement_club_id")
+)
+private Set<RenouvellementClub> renouvellementClubs = new HashSet<>();
 		
 	
 	
