@@ -1,4 +1,5 @@
 package com.stage.spring.service;
+import com.stage.spring.entity.ClubPublication;
 import com.stage.spring.entity.Event;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -10,7 +11,7 @@ public interface IServiceEvent {
 
     Event getEventById(Long eventId);
 
-    Event createEvent(Event event, MultipartFile image) throws IOException;
+    void createEvent(Event f, Long idu, MultipartFile file) throws IOException;
 
     Event updateEvent(Event event, MultipartFile image) throws IOException;
 

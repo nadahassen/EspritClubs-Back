@@ -34,7 +34,8 @@ public class Event implements Serializable {
     private Image image;
     private boolean isDeleted=false;
     private int nbParticipants;
-
+    @ManyToOne
+    private User organizer;
    /* @ManyToMany
     private Set<User> participants = new HashSet<>();*/
 

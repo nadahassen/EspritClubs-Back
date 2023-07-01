@@ -46,8 +46,7 @@ public class RenouvClubRestController {
     public void addClub2(@RequestParam("club") String club,
                          @RequestParam("file") MultipartFile file
 
-    )
-            throws IOException
+    )throws IOException
     {
         RenouvellementClub f = new ObjectMapper().readValue(club, RenouvellementClub.class);
         serviceRenouvClub.addClub2(f,file);
@@ -66,20 +65,15 @@ public class RenouvClubRestController {
     @PostMapping("/sendMailrefus")
     public void sendMailrefus(@RequestBody Map<String, String> mailData) {
         String to = mailData.get("to");
-        String subject = "Rejet de la demande de renouvelement de club";
-        String body = "Cher etudiant,\n\nNous regrettons de vous informer que votre demande de renouvelement de club a été refusée. Merci de votre compréhension.\\n\\nCordialement,\\nL'équipe d'Esprit";
+        String subject = "Rejet de la demande de renouvellement de club";
+        String body = "Cher etudiant,\n\nNous regrettons de vous informer que votre demande de renouvellement de club a été refusée. Merci de votre compréhension.\\n\\nCordialement,\\nL'équipe d'Esprit";
         serviceMail.sendMailRefus(to, subject, body);
     }
     //uploadFiles
-
-
-
     @PostMapping("/uploadFileClub/{idF}")
     public List<String> uploadFiles(@PathVariable("idF") Long idF, @RequestParam("files")List<MultipartFile> multipartFiles) throws IOException {
 
-
         return  serviceRenouvClub.uploadFilesAndAffectToClub(idF,multipartFiles);
-
     }
 
     //retreiveAll
@@ -133,8 +127,6 @@ public class RenouvClubRestController {
         return serviceRenouvClub.retrieveClub(clubId);
     }
 
-
-
     // retrieve participant
     @GetMapping("/retrieve-participants-club/{club-id}")
 
@@ -142,8 +134,6 @@ public class RenouvClubRestController {
         return serviceRenouvClub.retrieveClubParticipants(id);
 
     }
-
-
     // get files
     @GetMapping("/list-other-files/{club-id}")
     public List<File> getOtherFiles(@PathVariable("club-id") Long clubId){

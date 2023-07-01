@@ -2,6 +2,7 @@ package com.stage.spring.controllers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.stage.spring.entity.ClubPublication;
 import com.stage.spring.entity.Event;
 import com.stage.spring.entity.Image;
 import com.stage.spring.service.ServiceEvent;
@@ -32,13 +33,22 @@ public class EventRestController {
     }
 
 
-    @PostMapping("/createEvent")
+   /* @PostMapping("/createEvent")
     public Event createEvent(@RequestBody Event event, @RequestParam(name = "image", required = false) MultipartFile image)
             throws IOException {
         return serviceEvent.createEvent(event, image);
     }
+*/
+    @PostMapping("/createEvent/{idu}")
+    public void createEvent(@RequestParam("event") String event,
+                        @RequestParam("file") MultipartFile file,
 
-
+                        @PathVariable("idu") Long idu)
+            throws IOException
+    {
+        Event f = new ObjectMapper().readValue(event, Event.class);
+        serviceEvent.createEvent(f, idu,file);
+    }
 
     @PutMapping("/updateEvent/{eventId}")
     public Event updateEvent(@PathVariable("eventId") Long eventId, @RequestBody Event event,
