@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -29,9 +30,14 @@ public class Election {
 
     private String typeElection;
 
+    // relation avec club
     @ManyToOne
     @JoinColumn(name = "club_publication_id")
     private ClubPublication clubPublication;
+
+    //relation avec vote :'une élection peut avoir plusieurs votes associés.
+    @OneToMany(mappedBy = "election")
+    private List<Vote> votes;
 
 
 

@@ -146,7 +146,9 @@ public class User implements Serializable{
 )
 private Set<RenouvellementClub> renouvellementClubs = new HashSet<>();
 		
-	
+//relation avec Vote 'un utilisateur peut avoir plusieurs votes associés
+@OneToMany(mappedBy = "user")
+private List<Vote> votes;
 	
 	
 	
