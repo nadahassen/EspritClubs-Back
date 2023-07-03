@@ -58,4 +58,6 @@ public class ClubPublication {
     @OneToMany(mappedBy = "clubSouhaite")
     private List<Condidature> candidatures;
 
+    @OneToMany(mappedBy = "clubPublication")
+    private List<Election> elections;
 }
