@@ -13,9 +13,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -29,16 +26,11 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.stage.spring.utils.UserCode;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 @Entity
 @Getter
@@ -149,8 +141,10 @@ private Set<RenouvellementClub> renouvellementClubs = new HashSet<>();
 //relation avec Vote 'un utilisateur peut avoir plusieurs votes associés
 @OneToMany(mappedBy = "user")
 private List<Vote> votes;
-	
-	
+
+//relation avec postuler
+	@OneToMany(mappedBy = "user")
+	private List<PostulerVote> postulerVotes;
 	
 	
 

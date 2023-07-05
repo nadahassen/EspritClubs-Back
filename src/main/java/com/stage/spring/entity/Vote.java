@@ -30,10 +30,10 @@ public class Vote {
 
     private String nomClub;
 
-    //relation avec election :un vote est associé à une seule élection
+    //relation avec postuler
     @ManyToOne
-    @JoinColumn(name = "election_id")
-    private Election election;
+    @JoinColumn(name = "postulervote_id")
+    private PostulerVote postulerVote;
     //relation avec user :'un vote est associé à un seul utilisateur
     @ManyToOne
     @JoinColumn(name = "user_id")

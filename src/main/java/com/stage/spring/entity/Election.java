@@ -37,10 +37,9 @@ public class Election {
     @JoinColumn(name = "club_publication_id")
     private ClubPublication clubPublication;
 
-    //relation avec vote :'une élection peut avoir plusieurs votes associés.
+    //relation avec postuler  :'une élection peut avoir plusieurs condidats associés.
     @OneToMany(mappedBy = "election")
-    private List<Vote> votes;
-
+    private List<PostulerVote> postulerVotes ;
 
 
 
