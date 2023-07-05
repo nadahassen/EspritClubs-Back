@@ -31,6 +31,8 @@ public class Election {
     private String NomsParticipants;
 
     private String typeElection;
+    @OneToOne(cascade = CascadeType.ALL)
+    private Image image;
 
     // relation avec club
     @ManyToOne
