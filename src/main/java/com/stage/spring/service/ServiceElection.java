@@ -26,10 +26,12 @@ public class ServiceElection implements IServiceElection {
 
     @Override
     public Election retrieveElection(Long id) {
+
         return electionRepository.findById(id).orElse(null);
     }
     @Override
     public Election addElection(Election election) {
+
         return electionRepository.save(election);
     }
 

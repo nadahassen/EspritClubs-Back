@@ -18,7 +18,7 @@ import java.util.Date;
 public class Vote {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String idVote;
+    private Long idVote;
 
     private Date dateVote;
 
@@ -28,7 +28,7 @@ public class Vote {
 
     private String nomCandidat;
 
-    private String nomParti;
+    private String nomClub;
 
     //relation avec election :un vote est associé à une seule élection.
     @ManyToOne

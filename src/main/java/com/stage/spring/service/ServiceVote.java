@@ -4,6 +4,10 @@ import com.stage.spring.entity.Vote;
 import com.stage.spring.repository.VoteRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,13 +18,16 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 
-public class ServiceVote implements IServiceVote{
+public class ServiceVote implements IServiceVote {
 
     @Autowired
     private VoteRepository voteRepository;
+
+
     @Override
     public List<Vote> retrieveAllVotes() {
-        return voteRepository.findAll();    }
+        return voteRepository.findAll();
+    }
 
     @Override
     public Vote addVote(Vote vote) {
@@ -28,7 +35,7 @@ public class ServiceVote implements IServiceVote{
     }
 
     @Override
-    public void deleteVote(String id) {
+    public void deleteVote(Long id) {
         voteRepository.deleteById(id);
 
     }
@@ -39,35 +46,39 @@ public class ServiceVote implements IServiceVote{
     }
 
     @Override
-    public Vote retrieveVote(String id) {
-        return voteRepository.findById(id).orElse(null);
+    public Vote retrieveVote(Long id) {
+        return voteRepository.findById(id).orElse(null);    }
+
+    @Override
+    public Boolean checkIfExist(Long id) {
+        return voteRepository.existsById(id);
+    }
+
+    //retrieves all the votes for a given election, filters the votes by candidate name and party name if specified,
+    // and returns a Map with the candidate names and the number of votes for each candidate.
+  /*  public Map<String, Long> getVoteResultsForElection(Long electionId, String candidateName, String clubame) {
+        List<Vote> votes = voteRepository.findByElectionIdAndNomCandidatAndNomClub(electionId, candidateName, clubame);
+        return votes.stream()
+                .collect(Collectors.groupingBy(Vote::getNomCandidat, Collectors.counting()));
+    }
+
+    //retrieve the vote results for a specific election, filtered by candidate name and party name.
+    @Override
+    public List<Vote> getVotesForElection(Long electionId) {
+        return voteRepository.findByElectionId(electionId);
+    }*/
+    @Override
+    public Page<Vote> getVotesPagedAndSorted(int offset, int pageSize, String field) {
+        return voteRepository.findAll(PageRequest.of(offset, pageSize, Sort.by(field)));
     }
 
     @Override
-    public Boolean checkIfExist(String id) {
-        return voteRepository.existsById(id);
+    public Page<Vote> getVotesPaged(Pageable pageable) {
+        return voteRepository.findAll(pageable);
     }
+}
 // récupère tous les votes pour une élection donnée,
 // filtre éventuellement les votes par nom de candidat ou nom de parti,
 // et renvoie un Map avec les noms des candidats et le nombre de votes pour chaque candidat.
 // Cela permet de récupérer les résultats des votes pour une élection spécifique et d'effectuer
 // des calculs ou des analyses supplémentaires sur les données.
-    @Override
-    public Map<String, Long> retrieveAllVotesByCandidat(String nomElection) {
-
-        List<Vote> allVotesByElection = this.retrieveAllVotes();
-        List<String> candidats = new ArrayList<>();
-
-        allVotesByElection.removeIf(v -> !v.getNomElection().equals(nomElection));
-
-//        else if (nomCandidat != null) {
-//            allVotes.removeIf(v -> !v.getNomCandidat().equals(nomCandidat));
-//        } else if (nomParti != null){
-//            allVotes.removeIf(v -> !v.getNomParti().equals(nomParti));
-//        }
-        for (Vote vote: allVotesByElection) {
-            candidats.add(vote.getNomCandidat());
-        }
-        return candidats.stream().collect(Collectors.groupingBy(e -> e, Collectors.counting()));
-    }
-}
