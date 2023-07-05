@@ -30,11 +30,11 @@ public class Vote {
 
     private String nomClub;
 
-    //relation avec election :un vote est associé à une seule élection.
+    //relation avec election :un vote est associé à une seule élection
     @ManyToOne
     @JoinColumn(name = "election_id")
     private Election election;
-    //relation avec user :'un vote est associé à un seul utilisateur.
+    //relation avec user :'un vote est associé à un seul utilisateur
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;

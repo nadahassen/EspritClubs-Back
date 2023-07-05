@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.util.Date;
 import java.util.List;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -27,6 +26,9 @@ public class Election {
     private String nomElection;
 
     private Date dateElection;
+    private Date dateFinElection;
+
+    private String NomsParticipants;
 
     private String typeElection;
 
