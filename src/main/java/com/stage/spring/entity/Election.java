@@ -1,5 +1,6 @@
 package com.stage.spring.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,6 +35,18 @@ public class Election {
     @OneToOne(cascade = CascadeType.ALL)
     private Image image;
 
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(pattern = "yyyy-MM-dd@HH:mm:ss.SSSZ")
+    private Date createdAt;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(pattern = "yyyy-MM-dd@HH:mm:ss.SSSZ")
+    private Date modifiedAt;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(pattern = "yyyy-MM-dd@HH:mm:ss.SSSZ")
+    private Date deletedAt;
     // relation avec club
     @ManyToOne
     @JoinColumn(name = "club_publication_id")

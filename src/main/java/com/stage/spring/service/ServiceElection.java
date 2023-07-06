@@ -1,6 +1,7 @@
 package com.stage.spring.service;
 
 import com.stage.spring.entity.Election;
+import com.stage.spring.entity.Image;
 import com.stage.spring.repository.ElectionRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -17,7 +24,9 @@ public class ServiceElection implements IServiceElection {
 
     @Autowired
     private ElectionRepository electionRepository;
+    @Autowired
 
+    IServiceImage imageService;
     @Override
     public List<Election> retrieveAllElections() {
         return electionRepository.findAll();
@@ -30,9 +39,17 @@ public class ServiceElection implements IServiceElection {
         return electionRepository.findById(id).orElse(null);
     }
     @Override
-    public Election addElection(Election election) {
+    public void addElection(Election election, MultipartFile file) throws IOException {
+        List<String> filenames = new ArrayList<>();
+        Date date = new Date(System.currentTimeMillis());
+        election.setCreatedAt(date);
 
-        return electionRepository.save(election);
+        Image image = new Image(file.getOriginalFilename());
+        String filename1 = StringUtils.cleanPath(file.getOriginalFilename());
+        filenames.add(filename1);
+        election.setImage(image);
+        imageService.save(file);
+        electionRepository.save(election);
     }
 
     @Override
