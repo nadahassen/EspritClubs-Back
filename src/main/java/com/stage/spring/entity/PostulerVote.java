@@ -1,5 +1,6 @@
 package com.stage.spring.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -40,6 +41,7 @@ public class PostulerVote {
     //relation avec election
     @ManyToOne
     @JoinColumn(name = "election_id")
+    @JsonIgnore
     private Election election;
 
     //relation avec user
