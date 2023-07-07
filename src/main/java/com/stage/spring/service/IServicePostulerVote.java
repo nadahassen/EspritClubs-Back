@@ -2,9 +2,10 @@ package com.stage.spring.service;
 
 import com.stage.spring.entity.Condidature;
 import com.stage.spring.entity.PostulerVote;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+@Service
 public interface IServicePostulerVote {
 
     List<PostulerVote> retrieveAllPost ();
@@ -16,4 +17,7 @@ public interface IServicePostulerVote {
     PostulerVote  updatePost(PostulerVote  a);
 
     PostulerVote  retrievePostById(Long id);
+
+   // List<PostulerVote> findByElectionId(Long idElection);
+   List<PostulerVote> findByElectionId(Long idElection);
 }

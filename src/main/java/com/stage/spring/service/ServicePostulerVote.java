@@ -45,4 +45,9 @@ public class ServicePostulerVote implements IServicePostulerVote
         PostulerVote a =postRepo.findById(id).get();
         return a;
     }
+
+    @Override
+    public List<PostulerVote> findByElectionId(Long idElection) {
+        return postRepo.findByElectionIdElection(idElection);
+    }
 }

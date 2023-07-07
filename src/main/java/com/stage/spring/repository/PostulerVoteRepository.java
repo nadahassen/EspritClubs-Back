@@ -8,9 +8,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-
 public interface PostulerVoteRepository extends JpaRepository<PostulerVote, Long> {
 
-    //List<Election> findByElectionId(Long idElection);
+    List<PostulerVote> findByElectionIdElection(Long electionId);
 
 }

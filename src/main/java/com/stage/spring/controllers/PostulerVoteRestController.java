@@ -71,6 +71,13 @@ public class PostulerVoteRestController
         return servicePost.retrievePostById(id);
     }
 
-
-
+    @GetMapping("/election/{electionId}")
+    public ResponseEntity<List<PostulerVote>> findByElectionId(@PathVariable Long electionId) {
+        List<PostulerVote> postulerVotes = servicePost.findByElectionId(electionId);
+        if (!postulerVotes.isEmpty()) {
+            return ResponseEntity.ok(postulerVotes);
+        } else {
+            return ResponseEntity.noContent().build();
+        }
+    }
 }
