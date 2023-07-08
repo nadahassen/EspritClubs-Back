@@ -29,7 +29,7 @@ public class Vote {
     private String nomCandidat;
 
     private String nomClub;
-
+    private int voteCount;
     //relation avec postuler
     @ManyToOne
     @JoinColumn(name = "postulervote_id")
