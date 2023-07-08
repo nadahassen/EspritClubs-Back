@@ -1,5 +1,7 @@
 package com.stage.spring.controllers;
 
+import com.stage.spring.entity.PostulerVote;
+import com.stage.spring.repository.PostulerVoteRepository;
 import com.stage.spring.service.IServiceVote;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,7 +30,8 @@ public class VoteRestController {
 
     @Autowired
     private IServiceVote serviceVote;
-
+    @Autowired
+    private PostulerVoteRepository postulerVoteRepository;
     @GetMapping("/get-all-votes")
     public List<Vote> getAllVotes() {
 
@@ -90,5 +94,39 @@ public class VoteRestController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }*/
+
+
+
+    //vote counting for a candidate
+    @PostMapping("/count")
+    public ResponseEntity<?> countVote(@RequestParam Long candidateId) {
+        // Retrieve the postulerVote record for the candidate from the database
+        PostulerVote postulerVote = postulerVoteRepository.findById(candidateId).orElse(null);
+
+        if (postulerVote == null) {
+            // Handle the case when the candidate does not exist
+            return ResponseEntity.notFound().build();
+        }
+
+        // Increment the vote count
+        int newVoteCount = postulerVote.getVoteCount() + 1;
+        postulerVote.setVoteCount(newVoteCount);
+
+        // Save the updated postulerVote record
+        postulerVoteRepository.save(postulerVote);
+
+        // Calculate the percentage of votes for the candidate
+        int totalVotes = postulerVote.getElection().getPostulerVotes().size();
+        double percentage = totalVotes > 0 ? (newVoteCount / (double) totalVotes) * 100 : 0;
+
+        // Create a response object with the updated vote count and percentage
+        Map<String, Object> response = new HashMap<>();
+        response.put("voteCount", newVoteCount);
+        response.put("percentage", percentage);
+
+        // Return the response as the API response
+        return ResponseEntity.ok(response);
+    }
+
 
 }

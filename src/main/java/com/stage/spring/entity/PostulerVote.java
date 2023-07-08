@@ -32,7 +32,7 @@ public class PostulerVote {
     private String emailCondidat;
     private String ageCondidat;
 
-
+    private int voteCount;
     //relation avec vote
     @OneToMany(mappedBy = "postulerVote")
     private List<Vote> votes ;
