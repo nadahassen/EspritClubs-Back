@@ -33,6 +33,7 @@ public class PostulerVote {
     private String ageCondidat;
 
     private int voteCount;
+    private Double percentage;
     //relation avec vote
     @OneToMany(mappedBy = "postulerVote")
     private List<Vote> votes ;

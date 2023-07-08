@@ -112,12 +112,13 @@ public class VoteRestController {
         int newVoteCount = postulerVote.getVoteCount() + 1;
         postulerVote.setVoteCount(newVoteCount);
 
-        // Save the updated postulerVote record
-        postulerVoteRepository.save(postulerVote);
-
         // Calculate the percentage of votes for the candidate
         int totalVotes = postulerVote.getElection().getPostulerVotes().size();
-        double percentage = totalVotes > 0 ? (newVoteCount / (double) totalVotes) * 100 : 0;
+        double percentage = (newVoteCount / (double) totalVotes) * 100;
+        postulerVote.setPercentage(percentage);
+
+        // Save the updated postulerVote record
+        postulerVoteRepository.save(postulerVote);
 
         // Create a response object with the updated vote count and percentage
         Map<String, Object> response = new HashMap<>();
@@ -127,6 +128,7 @@ public class VoteRestController {
         // Return the response as the API response
         return ResponseEntity.ok(response);
     }
+
 
 
 }
