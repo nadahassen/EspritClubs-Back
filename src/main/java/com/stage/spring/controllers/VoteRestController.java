@@ -112,8 +112,12 @@ public class VoteRestController {
         int newVoteCount = postulerVote.getVoteCount() + 1;
         postulerVote.setVoteCount(newVoteCount);
 
+        // Retrieve the total vote count for the election
+        int totalVotes = postulerVote.getElection().getPostulerVotes().stream()
+                .mapToInt(PostulerVote::getVoteCount)
+                .sum();
+
         // Calculate the percentage of votes for the candidate
-        int totalVotes = postulerVote.getElection().getPostulerVotes().size();
         double percentage = (newVoteCount / (double) totalVotes) * 100;
         postulerVote.setPercentage(percentage);
 
