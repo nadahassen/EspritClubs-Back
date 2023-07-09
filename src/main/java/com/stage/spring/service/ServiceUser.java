@@ -1,4 +1,5 @@
 package com.stage.spring.service;
+import org.springframework.mail.SimpleMailMessage;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -77,59 +78,142 @@ public class ServiceUser implements IServiceUser {
 	    }*/
 //--------------------fail----------------------------
 	@Override
-	public String addUser(User u,MultipartFile file) {
+	public String addUser(User u, MultipartFile file) {
 		Date date = new Date(System.currentTimeMillis());
-		User searchedUser=null;
-		String token=null;
+		User searchedUser = null;
+		String token = null;
 		try {
 			log.info("in method addUser");
 			searchedUser = userRepository.findOneByUserName(u.getUserName());
-			if(searchedUser==null) 
-			                     {
-			log.info("userName dont exist");
-			u.setCreatedAt(date);
-			if (u.getBirthDate()!=null){
-			Period period = Period.between(u.getBirthDate()
-					                        .toInstant()
-					                        .atZone(ZoneId.systemDefault())
-					                        .toLocalDate(),
-					                       date
-					                        .toInstant()
-					                        .atZone(ZoneId.systemDefault())
-					                        .toLocalDate());
-			u.setAge(period.getYears());}
-			u.setPassword(encoder.encode(u.getPassword()));
+			if (searchedUser == null) {
+				log.info("userName don't exist");
+				u.setCreatedAt(date);
+				if (u.getBirthDate() != null) {
+					Period period = Period.between(u.getBirthDate()
+									.toInstant()
+									.atZone(ZoneId.systemDefault())
+									.toLocalDate(),
+							date
+									.toInstant()
+									.atZone(ZoneId.systemDefault())
+									.toLocalDate());
+					u.setAge(period.getYears());
+				}
+				u.setPassword(encoder.encode(u.getPassword()));
 
-			Image image = new Image(file.getOriginalFilename());
-			u.setImage(image);
-			imageService.save(file);
-					//EndImage
+				Image image = new Image(file.getOriginalFilename());
+				u.setImage(image);
+				imageService.save(file);
 
-			userRepository.save(u);
-			
-			//----------------tokken_generation---------------------------
-			 token =UUID.randomUUID().toString();
-			 ConfirmationToken	 confirmationToken = new ConfirmationToken(
+				userRepository.save(u);
+
+				// Send email with username and password
+				String message = "Your username: " + u.getUserName() + "\nYour password: " + u.getPassword();
+				sendEmail(u.getEmail(), "Account Details", message);
+
+				// Generate token
+				token = UUID.randomUUID().toString();
+				ConfirmationToken confirmationToken = new ConfirmationToken(
 						token,
 						LocalDateTime.now(),
 						LocalDateTime.now().plusMinutes(15),
 						u
-						);
+				);
 				confirmationTokenService.saveConfirmationToken(confirmationToken);
-				
-			//------------------end_tokken_generation---------------------
-			//--------------sending_the_link------------------------------
-				String link="http://127.0.0.1:8089/SpringMVC/User/confirm/"+token;
-				send(u.getEmail(),buildEmail(u.getUserName(), link));
+
+				// Send email with confirmation link
+				String link = "http://127.0.0.1:8089/SpringMVC/User/confirm/" + token;
+				send(u.getEmail(), buildEmail(u.getUserName(), u.getPassword(), link));
+			} else {
+				log.info("userName already exists!!");
 			}
-			else {log.info("userName already exist!!");}
 			log.info("out of method addUser without errors");
 		} catch (Exception e) {
 			log.error("error in method addUser" + e);
-			
 		}
 		return token;
 	}
+
+	// Mail creation user
+	public void sendEmail(String to, String subject, String text) {
+		MimeMessage message = mailSender.createMimeMessage(); // set to true, the email content will be interpreted as HTML
+		MimeMessageHelper helper;
+		try {
+			helper = new MimeMessageHelper(message, true);
+			helper.setTo(to);
+			helper.setSubject(subject);
+			helper.setText(text, true);
+			mailSender.send(message);
+		} catch (MessagingException e) {
+			e.printStackTrace();
+			// Handle the exception accordingly
+		}
+	}
+
+	/*public void sendEmail(String to, String subject, String text) {
+		SimpleMailMessage message = new SimpleMailMessage();
+		message.setTo(to);
+		message.setSubject(subject);
+		message.setText(text);
+		mailSender.send(message);
+	}*/
+
+	private String buildEmail(String name, String password, String link) {
+		return "<div style=\"font-family: Helvetica, Arial, sans-serif; font-size: 16px; margin: 0; color: #0b0c0c;\">\n" +
+				"  <table role=\"presentation\" width=\"100%\" style=\"border-collapse: collapse; min-width: 100%; width: 100%!important;\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n" +
+				"    <tbody>\n" +
+				"      <tr>\n" +
+				"        <td width=\"100%\" height=\"53\" bgcolor=\"#0b0c0c\">\n" +
+				"          <table role=\"presentation\" width=\"100%\" style=\"border-collapse: collapse; max-width: 580px;\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" align=\"center\">\n" +
+				"            <tbody>\n" +
+				"              <tr>\n" +
+				"                <td width=\"70\" bgcolor=\"#0b0c0c\" valign=\"middle\">\n" +
+				"                  <table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"border-collapse: collapse;\">\n" +
+				"                    <tbody>\n" +
+				"                      <tr>\n" +
+				"                        <td style=\"padding-left: 10px;\"></td>\n" +
+				"                        <td style=\"font-size: 28px; line-height: 1.315789474; Margin-top: 4px; padding-left: 10px;\">\n" +
+				"                          <span style=\"font-family: Helvetica, Arial, sans-serif; font-weight: 700; color: #ffffff; text-decoration: none; vertical-align: top; display: inline-block;\">Confirm your email</span>\n" +
+				"                        </td>\n" +
+				"                      </tr>\n" +
+				"                    </tbody>\n" +
+				"                  </table>\n" +
+				"                </td>\n" +
+				"              </tr>\n" +
+				"            </tbody>\n" +
+				"          </table>\n" +
+				"        </td>\n" +
+				"      </tr>\n" +
+				"    </tbody>\n" +
+				"  </table>\n" +
+				"  <table role=\"presentation\" class=\"content\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"border-collapse: collapse; max-width: 580px; width: 100%!important;\" width=\"100%\">\n" +
+				"    <tbody>\n" +
+				"      <tr>\n" +
+				"        <td height=\"30\"><br></td>\n" +
+				"      </tr>\n" +
+				"      <tr>\n" +
+				"        <td width=\"10\" valign=\"middle\"><br></td>\n" +
+				"        <td style=\"font-family: Helvetica, Arial, sans-serif; font-size: 19px; line-height: 1.315789474; max-width: 560px;\">\n" +
+				"          <p style=\"Margin: 0 0 20px 0; font-size: 19px; line-height: 25px; color: #0b0c0c;\">Hi " + name + ",</p>\n" +
+				"          <p style=\"Margin: 0 0 20px 0; font-size: 19px; line-height: 25px; color: #0b0c0c;\">Thank you for registering. Here are your account details:</p>\n" +
+				"          <p style=\"Margin: 0 0 20px 0; font-size: 19px; line-height: 25px; color: #0b0c0c;\">Username: " + name + "</p>\n" +
+				"          <p style=\"Margin: 0 0 20px 0; font-size: 19px; line-height: 25px; color: #0b0c0c;\">Password: " + password + "</p>\n" +
+				"          <blockquote style=\"Margin: 0 0 20px 0; border-left: 10px solid #b1b4b6; padding: 15px 0 0.1px 15px; font-size: 19px; line-height: 25px;\">\n" +
+				"            <p style=\"Margin: 0 0 20px 0; font-size: 19px; line-height: 25px; color: #0b0c0c;\"><a href=\"" + link + "\">Activate Now</a></p>\n" +
+				"          </blockquote>\n" +
+				"          <p>Link will expire in 15 minutes.</p>\n" +
+				"          <p>See you soon</p>\n" +
+				"        </td>\n" +
+				"        <td width=\"10\" valign=\"middle\"><br></td>\n" +
+				"      </tr>\n" +
+				"      <tr>\n" +
+				"        <td height=\"30\"><br></td>\n" +
+				"      </tr>\n" +
+				"    </tbody>\n" +
+				"  </table>\n" +
+				"</div>";
+	}
+
 
 	@Override
 	public List<User> getusers() {
