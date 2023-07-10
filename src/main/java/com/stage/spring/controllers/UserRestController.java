@@ -64,7 +64,7 @@ public class UserRestController {
 	    private MailConstructor mailConstructor;
 	 @Autowired
 	 private JavaMailSender mailSender;
-	
+
 	
 	@PostMapping("/signin")
 	public ResponseEntity<?> authenticateUser( @RequestBody LoginRequest loginRequest) {
@@ -104,9 +104,33 @@ public class UserRestController {
 		return serviceUser.forgotPassword(username, request);
 	}
 	@PostMapping("/reset/{token}/{newpassword}")
-	public String resetPassword(@PathVariable("token") String token,@PathVariable("newpassword") String newpassword ) {
+	public String resetPassword(@PathVariable("token") String token,
+								@PathVariable("newpassword") String newpassword )
+	{
 		return serviceUser.fogetPasswordSetting(token, newpassword);
 	}
+
+	// Endpoint to change the password
+	@PostMapping("/reset")
+	public String resetPassword2(@RequestParam("newpassword") String newPassword) {
+		// Get the currently authenticated user
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String username = authentication.getName();
+
+		// Retrieve the user from the database
+		User user = userRepository.findOneByUserName(username);
+		if (user == null) {
+			// User not found
+			return "User not found";
+		}
+
+		// Set the new password
+		user.setPassword(newPassword);
+		userRepository.save(user);
+
+		return "Password reset successfully";
+	}
+
 	@GetMapping("/getusers")
 	public List<User> retrieveAllUsers(){
 		return serviceUser.getusers();

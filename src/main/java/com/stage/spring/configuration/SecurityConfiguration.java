@@ -74,6 +74,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 				.authorizeRequests().antMatchers("/**").permitAll()
 				.anyRequest().authenticated();
+
                /* .and()
                 .formLogin()//.loginPage("http://127.0.0.1:8089/SpringMVC/User/signin")
                 .failureHandler(failureHandler())
