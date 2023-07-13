@@ -123,7 +123,7 @@ public class User implements Serializable{
 	private Set<Club> clubs = new HashSet<>();
 
 //relation with class club publication
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "user_club_publication",
 			joinColumns = @JoinColumn(name = "user_id"),
 			inverseJoinColumns = @JoinColumn(name = "club_publication_id"))

@@ -111,7 +111,7 @@ public class UserRestController {
 	}
 
 	// Endpoint to change the password
-	@PostMapping("/reset")
+	/*@PostMapping("/reset")
 	public String resetPassword2(@RequestParam("newpassword") String newPassword) {
 		// Get the currently authenticated user
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -129,10 +129,12 @@ public class UserRestController {
 		userRepository.save(user);
 
 		return "Password reset successfully";
-	}
+	}*/
 
 	@GetMapping("/getusers")
-	public List<User> retrieveAllUsers(){
+	public List<User> retrieveAllUsers()
+
+	{
 		return serviceUser.getusers();
 	}
 	@GetMapping("/getusers2")

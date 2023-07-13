@@ -65,23 +65,44 @@ public class ClubRestController {
         serviceMail.sendMail(to, subject, body);
     }
 */
-    @PostMapping("/sendMail")
+   /* @PostMapping("/sendMail")
     public void sendMail(@RequestBody Map<String, String> mailData) {
         String to = mailData.get("to");
         String subject = "Club Creation Request";
         String body = "Dear student,\n\nThank you for your request to create a club. Your request has been accepted we will send you your crediantials soon." +
                 "\n\nBest regards,\nEsprit Team";
         serviceMail.sendMail(to, subject, body);
-    }
- //send when refused
+    }*/
 
+    @PostMapping("/sendMail")
+    public void sendMail(@RequestBody Map<String, String> mailData) {
+        String emailCondidat = mailData.get("emailCondidat");
+
+        String subject = "Club Creation Request";
+        String body = "Dear student,\n\nThank you for your request to create a club. " +
+                "Your request has been accepted, and we will send you your credentials soon." +
+                "\n\n Best regards,\n Esprit Team";
+
+        serviceMail.sendMail(emailCondidat, subject, body);
+    }
     @PostMapping("/sendMailrefus")
+    public void sendMailrefus(@RequestBody Map<String, String> mailData) {
+        String emailCondidat = mailData.get("emailCondidat");
+
+        String subject = "Rejet de la demande de création de club";
+        String body = "Cher etudiant,\n\nNous regrettons de vous informer que votre demande de création de club a été refusée. Merci de votre compréhension \\n\\nCordialement,\\nL'équipe d'Esprit";
+
+        serviceMail.sendMail(emailCondidat, subject, body);
+    }
+    //send when refused
+
+   /* @PostMapping("/sendMailrefus")
     public void sendMailrefus(@RequestBody Map<String, String> mailData) {
         String to = mailData.get("to");
         String subject = "Rejet de la demande de création de club";
         String body = "Cher etudiant,\n\nNous regrettons de vous informer que votre demande de création de club a été refusée. Merci de votre compréhension.\\n\\nCordialement,\\nL'équipe d'Esprit";
         serviceMail.sendMailRefus(to, subject, body);
-    }
+    }*/
     //uploadFiles
 
    /* @PostMapping("/uploadFilesClub/{idF}")
